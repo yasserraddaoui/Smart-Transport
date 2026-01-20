@@ -1,0 +1,48 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: api-gateway
+
+  cloud:
+    gateway:
+      routes:
+        - id: auth-service
+          uri: http://auth-service:8081
+          predicates:
+            - Path=/auth/**
+          filters:
+            - AuthenticationFilter
+
+        - id: bus-service
+          uri: http://bus-service:8082
+          predicates:
+            - Path=/bus/**
+          filters:
+            - AuthenticationFilter
+
+        - id: driver-service
+          uri: http://driver-service:8083
+          predicates:
+            - Path=/driver/**
+          filters:
+            - AuthenticationFilter
+
+        - id: gps-service
+          uri: http://gps-service:8084
+          predicates:
+            - Path=/gps/**
+          filters:
+            - AuthenticationFilter
+
+        - id: ticketing-service
+          uri: http://ticketing-service:8085
+          predicates:
+            - Path=/ticketing/**
+          filters:
+            - AuthenticationFilter
+
+logging:
+  level:
+    org.springframework.cloud.gateway: INFO

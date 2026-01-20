@@ -1,0 +1,69 @@
+@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap");
+
+:root {
+  --bg: #f2efe8;
+  --panel: #ffffff;
+  --panel-2: #f7f3ea;
+  --border: #e2d9c7;
+  --text: #1a1b1f;
+  --muted: #5b5b5f;
+  --primary: #b21f24;
+  --primary-2: #8f1a1f;
+  --accent: #0c3b5f;
+  --ok: #1b8f4e;
+  --warn: #b45309;
+  --danger: #b91c1c;
+  --shadow: 0 10px 30px rgba(20, 16, 10, 0.16);
+  --radius: 16px;
+  --radius-sm: 10px;
+  --font: "Space Grotesk", "Trebuchet MS", sans-serif;
+  --mono: "IBM Plex Mono", "Courier New", monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font);
+  background: radial-gradient(900px 540px at 15% -10%, rgba(178, 31, 36, 0.12), transparent 55%),
+    radial-gradient(820px 480px at 90% 10%, rgba(12, 59, 95, 0.12), transparent 60%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.65), transparent 40%),
+    var(--bg);
+  color: var(--text);
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(120deg, rgba(178, 31, 36, 0.06), transparent 40%),
+    radial-gradient(600px 300px at 70% 80%, rgba(12, 59, 95, 0.08), transparent 60%);
+  mix-blend-mode: multiply;
+  z-index: -1;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+code {
+  font-family: var(--mono);
+  font-size: 12px;
+}

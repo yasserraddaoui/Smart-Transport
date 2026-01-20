@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Smart Transport System</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="brand">
+        <div class="logo" aria-hidden="true">STS</div>
+        <div>
+          <div class="brand-title">Smart Transport System</div>
+          <div class="brand-subtitle">Interface du gateway</div>
+        </div>
+      </div>
+      <div class="status">
+        <span class="muted">Statut gateway</span>
+        <span id="health" class="pill">—</span>
+      </div>
+    </header>
+
+    <div class="layout">
+      <nav class="sidebar" aria-label="Navigation">
+        <button class="nav-item active" data-view="overview">Vue d’ensemble</button>
+        <button class="nav-item" data-view="auth">Authentification</button>
+        <button class="nav-item" data-view="services">Services</button>
+        <button class="nav-item" data-view="driver">Driver</button>
+        <button class="nav-item" data-view="gps">GPS</button>
+        <button class="nav-item" data-view="ticketing">Ticketing</button>
+      </nav>
+
+      <main class="content">
+        <section class="card view" data-view="overview">
+          <h2>Vue d’ensemble</h2>
+          <p class="muted">
+            Utilise le gateway pour tester rapidement les endpoints des microservices.
+          </p>
+          <div class="row">
+            <div class="tile">
+              <div class="tile-title">Token</div>
+              <div id="tokenState" class="tile-value">Non connecté</div>
+              <div id="tokenMeta" class="muted"></div>
+            </div>
+            <div class="tile">
+              <div class="tile-title">Dernière réponse</div>
+              <div id="lastStatus" class="tile-value">—</div>
+              <div id="lastPath" class="muted"></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="card view hidden" data-view="auth">
+          <h2>Authentification</h2>
+          <div class="row">
+            <div>
+              <label for="username">Nom d’utilisateur</label>
+              <input id="username" autocomplete="username" value="demo" />
+            </div>
+            <div>
+              <label for="password">Mot de passe</label>
+              <input
+                id="password"
+                autocomplete="current-password"
+                type="password"
+                value="x"
+              />
+            </div>
+          </div>
+          <div class="actions">
+            <button id="loginBtn">Se connecter</button>
+            <button id="logoutBtn" class="secondary">Se déconnecter</button>
+            <button id="copyTokenBtn" class="secondary">Copier le token</button>
+          </div>
+        </section>
+
+        <section class="card view hidden" data-view="services">
+          <h2>Services</h2>
+          <div class="grid">
+            <button class="action" data-method="GET" data-path="/bus/hello">Bus /hello</button>
+            <button class="action" data-method="GET" data-path="/driver/hello">
+              Driver /hello
+            </button>
+            <button class="action" data-method="GET" data-path="/gps/location">
+              GPS /location
+            </button>
+            <button class="action" data-method="GET" data-path="/ticketing/hello">
+              Ticketing /hello
+            </button>
+          </div>
+          <div class="actions">
+            <button
+              class="action secondary"
+              data-method="GET"
+              data-path="/auth/hello"
+              data-noauth="true"
+            >
+              Auth /hello
+            </button>
+            <button
+              class="action secondary"
+              data-method="GET"
+              data-path="/actuator/health"
+              data-noauth="true"
+            >
+              Gateway /health
+            </button>
+          </div>
+          <p class="muted">
+            Les routes sécurisées exigent <code>Authorization: Bearer &lt;token&gt;</code>.
+          </p>
+        </section>
+
+        <section class="card view hidden" data-view="driver">
+          <h2>Driver</h2>
+          <div class="row">
+            <div>
+              <label for="driverId">Driver ID</label>
+              <input id="driverId" inputmode="numeric" placeholder="ex: 1" />
+            </div>
+            <div>
+              <label>&nbsp;</label>
+              <div class="inline-actions">
+                <button class="action" data-method="GET" data-path="/driver">Lister</button>
+                <button id="driverGetBtn" class="secondary">Obtenir</button>
+                <button class="action secondary" data-method="POST" data-path="/driver">
+                  Créer
+                </button>
+                <button id="driverPutBtn" class="secondary">Mettre à jour</button>
+                <button id="driverDelBtn" class="secondary">Supprimer</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="card view hidden" data-view="gps">
+          <h2>GPS</h2>
+          <p class="muted">Exemple simple (coordonnées simulées côté service).</p>
+          <div class="actions">
+            <button class="action" data-method="GET" data-path="/gps/location">
+              Récupérer la localisation
+            </button>
+          </div>
+          <div id="gpsParsed" class="muted"></div>
+        </section>
+
+        <section class="card view hidden" data-view="ticketing">
+          <h2>Ticketing</h2>
+          <div class="actions">
+            <button class="action" data-method="POST" data-path="/ticketing/ticket">
+              Créer un ticket
+            </button>
+            <button class="action secondary" data-method="GET" data-path="/ticketing/price">
+              Calculer le prix
+            </button>
+          </div>
+        </section>
+
+        <section class="card">
+          <div class="results-header">
+            <h2>Résultats</h2>
+            <button id="clearBtn" class="secondary small">Effacer</button>
+          </div>
+          <pre id="out" class="output" aria-live="polite"></pre>
+        </section>
+      </main>
+    </div>
+
+    <script src="./app.js"></script>
+  </body>
+</html>

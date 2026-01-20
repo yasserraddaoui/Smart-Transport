@@ -1,0 +1,124 @@
+services:
+  api-gateway:
+    build: ./apigateway
+    ports:
+      - "8080:8080"
+    networks:
+      - sts-network
+    depends_on:
+      - auth-service
+      - bus-service
+      - driver-service
+      - gps-service
+      - ticketing-service
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "5173:80"
+    networks:
+      - sts-network
+    depends_on:
+      - api-gateway
+
+  auth-service:
+    build: ./auth-service
+    ports:
+      - "8081:8081"
+    networks:
+      - sts-network
+    depends_on:
+      - auth-db
+    environment:
+      - DB_HOST=auth-db
+      - DB_PORT=5432
+      - DB_NAME=authdb
+      - DB_USER=authuser
+      - DB_PASSWORD=authpass
+
+  bus-service:
+    build: ./bus-service
+    ports:
+      - "8082:8082"
+    networks:
+      - sts-network
+    depends_on:
+      - bus-db
+    environment:
+      - DB_HOST=bus-db
+      - DB_PORT=5432
+      - DB_NAME=busdb
+      - DB_USER=bususer
+      - DB_PASSWORD=buspass
+
+  driver-service:
+    build: ./driver-service
+    ports:
+      - "8083:8083"
+    networks:
+      - sts-network
+    depends_on:
+      - driver-db
+    environment:
+      - DB_HOST=driver-db
+      - DB_PORT=5432
+      - DB_NAME=driverdb
+      - DB_USER=driveruser
+      - DB_PASSWORD=driverpass
+
+  gps-service:
+    build: ./gps-service
+    ports:
+      - "8084:8084"
+    networks:
+      - sts-network
+
+  ticketing-service:
+    build: ./ticketing-billing-service
+    ports:
+      - "8085:8085"
+    networks:
+      - sts-network
+
+  auth-db:
+    image: postgres:16-alpine
+    environment:
+      - POSTGRES_DB=authdb
+      - POSTGRES_USER=authuser
+      - POSTGRES_PASSWORD=authpass
+    volumes:
+      - auth-db-data:/var/lib/postgresql/data
+    networks:
+      - sts-network
+
+  bus-db:
+    image: postgres:16-alpine
+    environment:
+      - POSTGRES_DB=busdb
+      - POSTGRES_USER=bususer
+      - POSTGRES_PASSWORD=buspass
+    volumes:
+      - bus-db-data:/var/lib/postgresql/data
+    networks:
+      - sts-network
+
+  driver-db:
+    image: postgres:16-alpine
+    environment:
+      - POSTGRES_DB=driverdb
+      - POSTGRES_USER=driveruser
+      - POSTGRES_PASSWORD=driverpass
+    volumes:
+      - driver-db-data:/var/lib/postgresql/data
+    networks:
+      - sts-network
+
+
+networks:
+  sts-network:
+    driver: bridge
+
+volumes:
+  auth-db-data:
+  bus-db-data:
+  driver-db-data:
